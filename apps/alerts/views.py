@@ -110,3 +110,46 @@ def alert_create(request):
     )
 
     return Response({"success": True, "id": str(alert.id)}, status=status.HTTP_201_CREATED)
+
+
+def get_status_from_score(score):
+    if score >= 80:
+        return "Generally Safe"
+    if score >= 50:
+        return "Exercise Caution"
+    return "Use Extra Caution"
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def score_view(request):
+    """Safety score based on alerts in the area."""
+    lat = float(request.GET.get("lat", 33.5731))
+    lng = float(request.GET.get("lng", -7.5898))
+    radius_km = float(request.GET.get("radius", 0.5))
+
+    alerts = Alert.objects.all()
+    nearby = [a for a in alerts if haversine_km(lat, lng, a.lat, a.lng) <= radius_km]
+
+    # Base score 100, -10 per alert (min 0)
+    penalty = len(nearby) * 10
+    country_score = max(0, min(100, 100 - penalty))
+
+    # International: deterministic global metric (simulates world index)
+    import math
+    seed = math.sin(lat * 0.1 + lng * 0.1) * 10000
+    random = abs(seed - math.floor(seed))
+    international_score = int(35 + random * 55)
+    international_score = max(0, min(100, international_score))
+
+    if not nearby:
+        country_score = max(country_score, 70)  # No alerts = at least "caution" level
+
+    status = get_status_from_score(country_score)
+
+    return Response({
+        "internationalScore": international_score,
+        "countryScore": country_score,
+        "score": country_score,
+        "status": status,
+    })
