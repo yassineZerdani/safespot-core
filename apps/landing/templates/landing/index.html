@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>SafeSpot – Safety & Incident Reporting App</title>
+  <meta name="description" content="SafeSpot helps you stay safe with real-time safety scores, incident alerts, and emergency SOS. Report hazards, view crime data, and get local emergency numbers.">
+  <meta name="keywords" content="safety app, incident reporting, crime map, emergency numbers, SafeSpot, location safety">
+  <meta name="author" content="SafeSpot">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://safespot.app/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://safespot.app/">
+  <meta property="og:title" content="SafeSpot – Stay Safe, Anywhere">
+  <meta property="og:description" content="Real-time safety scores, incident alerts, and emergency SOS. Know your surroundings.">
+  <meta property="og:image" content="https://safespot.app/og-image.png">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:site_name" content="SafeSpot">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SafeSpot – Stay Safe, Anywhere">
+  <meta name="twitter:description" content="Real-time safety scores, incident alerts, and emergency SOS.">
+
+  <!-- App Store / Play Store -->
+  <meta name="apple-itunes-app" content="app-id=YOUR_APP_ID">
+  <meta name="google-play-app" content="app-id=com.yassine.zerdani.safespot">
+
+  <!-- Theme & PWA -->
+  <meta name="theme-color" content="#059669">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #059669;
+      --primary-light: #10b981;
+      --primary-muted: #ecfdf5;
+      --primary-dark: #047857;
+      --slate-50: #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-500: #64748b;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      --white: #ffffff;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+      background: var(--slate-50);
+      color: var(--slate-800);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--slate-200);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--primary);
+    }
+    .logo svg { width: 28px; height: 28px; }
+    .nav { display: flex; gap: 32px; align-items: center; }
+    .nav a {
+      color: var(--slate-600);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+    .nav a:hover { color: var(--primary); }
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 0 80px;
+      background: linear-gradient(180deg, var(--white) 0%, var(--slate-50) 100%);
+    }
+    .hero-content { max-width: 640px; }
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 3.75rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--slate-900);
+      margin-bottom: 24px;
+    }
+    .hero h1 span { color: var(--primary); }
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--slate-600);
+      margin-bottom: 40px;
+      max-width: 520px;
+    }
+    .cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 14px rgba(5, 150, 105, 0.4);
+    }
+    .btn-primary:hover { box-shadow: 0 6px 20px rgba(5, 150, 105, 0.5); }
+    .btn-secondary {
+      background: var(--white);
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+    .btn-secondary:hover { background: var(--primary-muted); }
+    .features {
+      padding: 100px 0;
+      background: var(--white);
+    }
+    .features h2 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 60px;
+      color: var(--slate-900);
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 40px;
+    }
+    .feature-card {
+      padding: 32px;
+      background: var(--slate-50);
+      border-radius: 16px;
+      border: 1px solid var(--slate-200);
+    }
+    .feature-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--slate-800);
+    }
+    .feature-card p { color: var(--slate-600); font-size: 0.95rem; }
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--primary-muted);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+    .stores {
+      padding: 80px 0;
+      background: var(--slate-50);
+    }
+    .stores h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 40px;
+      color: var(--slate-900);
+    }
+    .store-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 24px;
+      background: var(--slate-900);
+      color: white;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: opacity 0.2s;
+    }
+    .store-btn:hover { opacity: 0.9; }
+    .store-btn svg { width: 28px; height: 28px; }
+    footer {
+      background: var(--slate-900);
+      color: var(--slate-400);
+      padding: 48px 0 32px;
+    }
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a {
+      color: var(--slate-400);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .footer-links a:hover { color: white; }
+    .footer-copy { font-size: 0.85rem; color: var(--slate-500); }
+    @media (max-width: 640px) {
+      .nav { display: none; }
+      .hero { padding-top: 100px; }
+      .cta-group { flex-direction: column; }
+      .btn { justify-content: center; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <a href="/" class="logo" aria-label="SafeSpot Home">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        SafeSpot
+      </a>
+      <nav class="nav">
+        <a href="#features">Features</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+        <a href="{{ web_app_url }}" class="btn btn-primary">Open App</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero-content">
+          <h1 id="hero-title">Stay safe, <span>anywhere</span></h1>
+          <p>Real-time safety scores, incident alerts, and emergency SOS. Know your surroundings and make informed decisions.</p>
+          <div class="cta-group">
+            <a href="{{ web_app_url }}" class="btn btn-primary">
+              Try SafeSpot
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#stores" class="btn btn-secondary">Download App</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="features" aria-labelledby="features-title">
+      <div class="container">
+        <h2 id="features-title">Everything you need to stay safe</h2>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <h3>Safety Score</h3>
+            <p>Get instant safety ratings for any location. See how safe an area is before you go.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <h3>Incident Alerts</h3>
+            <p>Community reports and verified incidents. Know about thefts, accidents, and hazards nearby.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+            </div>
+            <h3>Emergency SOS</h3>
+            <p>One-tap access to police, ambulance, and fire. Emergency numbers for 200+ countries.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h3>Report Alerts</h3>
+            <p>Report hazards and incidents. Help your community stay informed and safe.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="stores" id="stores" aria-labelledby="stores-title">
+      <div class="container">
+        <h2 id="stores-title">Download the app</h2>
+        <div class="store-buttons">
+          <a href="https://apps.apple.com/app/safespot/idYOUR_APP_ID" class="store-btn" aria-label="Download on the App Store">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c1.33-1.61 3.5-2.5 4.5-2.5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .13 1.06 0 2.04 0 0 0 0 0 0 0 0-1.5-.5-3.5.5-5 2z"/></svg>
+            App Store
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=com.yassine.zerdani.safespot" class="store-btn" aria-label="Get it on Google Play">
+            <svg viewBox="0 0 24 24"><path fill="currentColor" d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 010 1.73l-2.808 1.626L15.206 12l2.492-2.491zM5.864 2.658L16.8 8.99l-2.302 2.302-8.634-8.634z"/></svg>
+            Google Play
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <a href="/" class="logo" style="color: white;">SafeSpot</a>
+        <div class="footer-links">
+          <a href="/privacy/">Privacy Policy</a>
+          <a href="/terms/">Terms of Service</a>
+          <a href="mailto:support@safespot.app">Contact</a>
+        </div>
+      </div>
+      <p class="footer-copy">&copy; {% now "Y" %} SafeSpot. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "SafeSpot",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Android, iOS",
+    "description": "SafeSpot helps you stay safe with real-time safety scores, incident alerts, and emergency SOS for 200+ countries.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+</body>
+</html>

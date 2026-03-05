@@ -1,49 +1,69 @@
+version: "3.8"
+
 services:
   db:
-    image: postgis/postgis:latest
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-safespot}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-safespot}
-      POSTGRES_DB: ${POSTGRES_DB:-safespot}
+    # Using a specific, stable PostGIS version prevents unexpected crashes in production
+    image: postgis/postgis:15-3.3
+    container_name: safespot_db
+    restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    networks:
+      - safespot_network
     ports:
       - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U safespot"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
 
   redis:
     image: redis:alpine
+    container_name: safespot_redis
+    restart: always
+    networks:
+      - safespot_network
     ports:
       - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
 
   web:
-    build:
-      context: .
-      network: host
-    entrypoint: /entrypoint.sh
-    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3 --threads 2
+    build: .
+    container_name: safespot_web
+    restart: always
+    command: gunicorn safespot.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - .:/app
+      - static_volume:/app/staticfiles
+    env_file:
+      - .env
     ports:
       - "8000:8000"
-    environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-safespot}:${POSTGRES_PASSWORD:-safespot}@db:5432/${POSTGRES_DB:-safespot}
-      REDIS_URL: redis://redis:6379/0
-      DJANGO_SETTINGS_MODULE: config.settings.development
     depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      - db
+      - redis
+    networks:
+      - safespot_network
 
+  celery:
+    build: .
+    container_name: safespot_celery
+    restart: always
+    # This command starts the background worker to handle the heavy math and scraper queues
+    command: celery -A safespot worker -l INFO
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+    networks:
+      - safespot_network
+
+# This tells Docker to persist your database data even if the containers are destroyed
 volumes:
   postgres_data:
+  static_volume:
+
+# This connects these containers to the bridge network we created earlier
+networks:
+  safespot_network:
+    external: true

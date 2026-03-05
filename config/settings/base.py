@@ -10,6 +10,24 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 load_dotenv(BASE_DIR / ".env")
 
+# GDAL/GEOS paths for Django GIS (PostGIS) on macOS - install via: brew install gdal
+_gdal_paths = [
+    "/opt/homebrew/opt/gdal/lib/libgdal.dylib",  # Apple Silicon
+    "/usr/local/opt/gdal/lib/libgdal.dylib",     # Intel
+]
+_geos_paths = [
+    "/opt/homebrew/opt/geos/lib/libgeos_c.dylib",
+    "/usr/local/opt/geos/lib/libgeos_c.dylib",
+]
+for _p in _gdal_paths:
+    if Path(_p).exists():
+        os.environ.setdefault("GDAL_LIBRARY_PATH", _p)
+        break
+for _p in _geos_paths:
+    if Path(_p).exists():
+        os.environ.setdefault("GEOS_LIBRARY_PATH", _p)
+        break
+
 SECRET_KEY = os.environ.get(
     "DJANGO_SECRET_KEY",
     "django-insecure-dev-key-change-in-production",
@@ -27,6 +45,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "apps.alerts",
     "apps.incidents",
+    "apps.landing",
 ]
 
 MIDDLEWARE = [
@@ -46,7 +65,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "apps" / "landing" / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

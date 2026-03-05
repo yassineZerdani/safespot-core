@@ -53,6 +53,18 @@ API: http://localhost:8000/api/alerts/
 - **GET** `/api/alerts/?lat=33.57&lng=-7.59&radius=5` – list alerts near location
 - **POST** `/api/alerts/` – create alert (JSON: `type`, `description`, `lat`, `lng`)
 
+## Landing Page
+
+The root URL (`/`) serves a marketing landing page with SEO, Privacy Policy, and Terms of Service.
+
+- `/` – Landing page
+- `/privacy/` – Privacy Policy (required for app stores)
+- `/terms/` – Terms of Service
+- `/robots.txt` – Sitemap
+- `/sitemap.xml` – XML sitemap
+
+Set `WEB_APP_URL` and `SITE_URL` in `.env` for production.
+
 ## Environment
 
 - `DJANGO_ENV=development` (default) or `production`
