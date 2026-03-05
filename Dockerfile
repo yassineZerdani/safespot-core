@@ -5,10 +5,7 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# Workaround for Docker build DNS resolution (e.g. cloud VMs with restricted DNS)
-RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf \
-    && echo "nameserver 8.8.4.4" >> /etc/resolv.conf \
-    && apt-get update \
+RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         binutils \
         libproj-dev \
